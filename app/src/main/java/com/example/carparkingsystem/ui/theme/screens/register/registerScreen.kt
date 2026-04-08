@@ -1,46 +1,22 @@
 package com.example.carparkingsystem.ui.theme.screens.register
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -48,191 +24,243 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.carparkingsystem.R
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.carparkingsystem.R
+import com.example.carparkingsystem.data.AuthViewModel
 import com.example.carparkingsystem.navigation.ROUTE_LOGIN
 
+// ── Reuse the same colour tokens from Dashboard ────────────
+private val NavyDark   = Color(0xFF0A0F1E)
+private val NavyMid    = Color(0xFF0D1630)
+private val NavyCard   = Color(0xFF131D3B)
+private val NavyBorder = Color(0xFF1E2D5A)
+private val Amber      = Color(0xFFF5C842)
+private val TextMuted  = Color(0xFF7A8AB5)
+private val TextDim    = Color(0xFF5A6A90)
 
 @Composable
 fun RegisterScreen(navController: NavController) {
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmpassword by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var confirmPasswordVisible by remember { mutableStateOf(false) }
+    var username             by remember { mutableStateOf("") }
+    var email                by remember { mutableStateOf("") }
+    var password             by remember { mutableStateOf("") }
+    var confirmpassword      by remember { mutableStateOf("") }
+    var passwordVisible      by remember { mutableStateOf(false) }
+    var confirmPwVisible     by remember { mutableStateOf(false) }
+    val authViewModel: AuthViewModel = viewModel()
+    val context = LocalContext.current
 
-
-    val gradientBackground = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFF1A237E),
-            Color(0xFF283593),
-            Color(0xFF3949AB)
-        )
-    )
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(gradientBackground),
+            .background(NavyDark),
         contentAlignment = Alignment.Center
     ) {
-        Card(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(48.dp))
 
-        shape = RoundedCornerShape(28.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.92f)
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            brush = Brush.linearGradient(
-                colors = listOf(
-                    Color.White.copy(alpha = 0.9f),
-                    Color(0xFFBBCCF5).copy(alpha = 0.4f),
-                    Color.White.copy(alpha = 0.6f)
-                )
+            // ── Logo circle ────────────────────────────
+            Box(
+                modifier = Modifier
+                    .size(90.dp)
+                    .clip(CircleShape)
+                    .background(NavyCard)
+                    .then(
+                        Modifier.clip(CircleShape)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                // Replace with your actual Image composable:
+                // Image(painter = painterResource(R.drawable.logo), ...)
+                Text("🅿", fontSize = 36.sp)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Create Account",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = Amber
+            )
+            Text(
+                text = "Join ParkSmart — manage parking smarter",
+                fontSize = 12.sp,
+                color = TextDim,
+                modifier = Modifier.padding(bottom = 28.dp)
+            )
+
+            // ── Card ───────────────────────────────────
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = NavyMid),
+                border = BorderStroke(1.dp, NavyBorder)
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 28.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+
+                    // Username
+                    ParkField(
+                        label = "USERNAME",
+                        value = username,
+                        onValueChange = { username = it },
+                        placeholder = "Enter username",
+                        leadingIcon = { Icon(Icons.Default.Person, null, tint = TextDim) }
+                    )
+
+                    // Email
+                    ParkField(
+                        label = "EMAIL",
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholder = "Enter email address",
+                        leadingIcon = { Icon(Icons.Default.Email, null, tint = TextDim) }
+                    )
+
+                    // Password
+                    ParkField(
+                        label = "PASSWORD",
+                        value = password,
+                        onValueChange = { password = it },
+                        placeholder = "Create a password",
+                        leadingIcon = { Icon(Icons.Default.Lock, null, tint = TextDim) },
+                        trailingIcon = {
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(
+                                    imageVector = if (passwordVisible) Icons.Default.VisibilityOff
+                                    else Icons.Default.Visibility,
+                                    contentDescription = null,
+                                    tint = TextDim
+                                )
+                            }
+                        },
+                        visualTransformation = if (passwordVisible) VisualTransformation.None
+                        else PasswordVisualTransformation()
+                    )
+
+                    // Confirm Password
+                    ParkField(
+                        label = "CONFIRM PASSWORD",
+                        value = confirmpassword,
+                        onValueChange = { confirmpassword = it },
+                        placeholder = "Repeat your password",
+                        leadingIcon = { Icon(Icons.Default.Check, null, tint = TextDim) },
+                        trailingIcon = {
+                            IconButton(onClick = { confirmPwVisible = !confirmPwVisible }) {
+                                Icon(
+                                    imageVector = if (confirmPwVisible) Icons.Default.VisibilityOff
+                                    else Icons.Default.Visibility,
+                                    contentDescription = null,
+                                    tint = TextDim
+                                )
+                            }
+                        },
+                        visualTransformation = if (confirmPwVisible) VisualTransformation.None
+                        else PasswordVisualTransformation()
+                    )
+
+                    // Register button
+                    Button(
+                        onClick = {
+                            authViewModel.signup(
+                                username = username,
+                                email = email,
+                                password = password,
+                                confirmpassword = confirmpassword,
+                                navController = navController,
+                                context = context,
+                             )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Amber,
+                            contentColor = NavyDark
+                        )
+                    ) {
+                        Text(
+                            text = "Register",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    // Login link
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text("Already registered? ", color = TextDim, fontSize = 13.sp)
+                        Text(
+                            text = "Login here",
+                            color = Amber,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.clickable {
+                                navController.navigate(ROUTE_LOGIN)
+                            }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+        }
+    }
+}
+
+// ── Reusable themed text field ──────────────────────────────
+@Composable
+fun ParkField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None
+) {
+    Column {
+        Text(
+            text = label,
+            color = TextMuted,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.SemiBold,
+            letterSpacing = 0.6.sp,
+            modifier = Modifier.padding(bottom = 6.dp)
+        )
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = { Text(placeholder, color = Color(0xFF3A4A6A), fontSize = 14.sp) },
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            visualTransformation = visualTransformation,
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Amber,
+                unfocusedBorderColor = NavyBorder,
+                focusedContainerColor = NavyCard,
+                unfocusedContainerColor = NavyCard,
+                focusedTextColor = Color(0xFFE8EEFF),
+                unfocusedTextColor = Color(0xFFE8EEFF),
+                cursorColor = Amber
             )
         )
-//            shape = RoundedCornerShape(24.dp),
-//            elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
-//            colors = CardDefaults.cardColors(containerColor = Color.Yellow)
-        ) {
-
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 28.dp, vertical = 36.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "logo",
-                    modifier = Modifier.size(140.dp)
-
-//                        .clip(CircleShape)
-//                        .border(2.dp, Color.White, CircleShape)
-//                        .shadow(4.dp, CircleShape)
-                        .size(140.dp)
-                        .shadow(
-                            elevation = 16.dp,
-                            shape = CircleShape,
-                            ambientColor = Color(0xFF3949AB),
-                            spotColor = Color(0xFF3949AB)
-                        )
-                        .clip(CircleShape)
-                        .border(
-                            width = 3.dp,
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color.White,
-                                    Color(0xFFBBDEFB),
-                                    Color.White
-                                )
-                            ),
-                            shape = CircleShape
-                        )
-                        .padding(4.dp)
-                )
-                Text(
-                    text = "Register Here", fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Blue
-                )
-                Spacer(modifier = Modifier.height(28.dp))
-
-
-
-
-                OutlinedTextField(
-                    value = username,
-                    label = { Text(text = "Enter Username") },
-                    onValueChange = { username = it },
-                    placeholder = { Text(text = "Please Enter Username") },
-                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.height(28.dp))
-
-                OutlinedTextField(
-                    value = email,
-                    label = { Text(text = "Enter Your Email") },
-                    onValueChange = { email = it },
-                    placeholder = { Text(text = "Enter Email") },
-                    leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.height(28.dp))
-
-                OutlinedTextField(
-                    value = password,
-                    label = { Text(text = "Enter Password") },
-                    onValueChange = { password = it },
-                    placeholder = { Text(text = "Please Enter Password") },
-                    leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
-                    trailingIcon = {
-                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(
-                                imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                                contentDescription = if (passwordVisible) "Hide password" else "Show password"
-                            )
-                        }
-                    },
-                    visualTransformation = if (passwordVisible) VisualTransformation.None
-                    else PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.height(28.dp))
-
-                OutlinedTextField(
-                    value = confirmpassword,
-                    label = { Text(text = "Confirm Pasword") },
-                    onValueChange = { confirmpassword = it },
-                    placeholder = { Text(text = "") },
-                    leadingIcon = { Icon(Icons.Default.Check, contentDescription = null) },
-                    trailingIcon = {
-                        IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
-                            Icon(
-                                imageVector = if (confirmPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                                contentDescription = null
-                            )
-                        }
-                    },
-                    visualTransformation = if (confirmPasswordVisible) VisualTransformation.None
-                    else PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.height(28.dp))
-
-                Button(onClick = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp),
-                    shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF3949AB)
-                    )
-                ) { Text(text = "Register")}
-                Row() {
-                    Text(text = "Already Registered?", color = Color.Blue)
-                    Text(text = "Login Here", color = Color.Red, modifier = Modifier.clickable{navController.navigate(ROUTE_LOGIN)})
-                }
-
-            }
-        }
     }
 }
 
