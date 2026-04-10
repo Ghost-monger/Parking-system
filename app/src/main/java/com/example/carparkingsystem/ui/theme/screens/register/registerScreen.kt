@@ -48,8 +48,10 @@ fun RegisterScreen(navController: NavController) {
     var confirmpassword      by remember { mutableStateOf("") }
     var passwordVisible      by remember { mutableStateOf(false) }
     var confirmPwVisible     by remember { mutableStateOf(false) }
+    var phonenumber          by remember { mutableStateOf("") }
     val authViewModel: AuthViewModel = viewModel()
     val context = LocalContext.current
+
 
     Box(
         modifier = Modifier
@@ -127,6 +129,14 @@ fun RegisterScreen(navController: NavController) {
                         leadingIcon = { Icon(Icons.Default.Email, null, tint = TextDim) }
                     )
 
+                    ParkField(
+                        label = "PHONE NUMBER",
+                        value = phonenumber,
+                        onValueChange = { phonenumber = it },
+                        placeholder = "Enter your phone number",
+                        leadingIcon = { Icon(Icons.Default.Phone, null, tint = TextDim) }
+                    )
+
                     // Password
                     ParkField(
                         label = "PASSWORD",
@@ -175,6 +185,7 @@ fun RegisterScreen(navController: NavController) {
                             authViewModel.signup(
                                 username = username,
                                 email = email,
+                                phonenumber = phonenumber,
                                 password = password,
                                 confirmpassword = confirmpassword,
                                 navController = navController,

@@ -12,12 +12,22 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.carparkingsystem.data.AuthViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import com.example.carparkingsystem.navigation.ROUTE_LOGIN
+import kotlinx.coroutines.flow.StateFlow
+
 
 // ── Colour tokens ──────────────────────────────────────────
 val NavyDark    = Color(0xFF0A0F1E)
@@ -33,12 +43,26 @@ val TextDim     = Color(0xFF5A6A90)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Dashboard(navController: NavController) {
-    val selectedItem = remember { mutableStateOf(0) }
+fun Dashboard(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
+
+    val selectedItem = remember { mutableStateOf(0) }  // close remember here
+
+    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+
+    LaunchedEffect(isLoggedIn) {
+        if (!isLoggedIn) {
+            navController.navigate(ROUTE_LOGIN) {
+                popUpTo(0) { inclusive = true }
+            }
+        }
+    }
+
+    // rest of your Scaffold below...
+    val context = LocalContext.current
+
 
     Scaffold(
         containerColor = NavyDark,
-
         // ── TOP BAR ──────────────────────────────────────
         topBar = {
             TopAppBar(
@@ -52,11 +76,7 @@ fun Dashboard(navController: NavController) {
                 },
                 actions = {
                     TextButton(
-                        onClick = {
-                            // TODO: clear session / Firebase signOut()
-                            navController.navigate("login") {
-                                popUpTo(0) { inclusive = true }
-                            }
+                        onClick = {authViewModel.logout()
                         },
                         border = androidx.compose.foundation.BorderStroke(1.dp, Amber),
                         shape = RoundedCornerShape(20.dp),

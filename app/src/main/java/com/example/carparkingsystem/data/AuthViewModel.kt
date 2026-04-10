@@ -11,11 +11,13 @@ import com.example.carparkingsystem.navigation.ROUTE_DASHBOARD
 import com.example.carparkingsystem.navigation.ROUTE_LOGIN
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class AuthViewModel:ViewModel() {
     private val auth: FirebaseAuth=FirebaseAuth.getInstance()
-    fun signup(username:String,email:String,password:String,confirmpassword:String,navController: NavController,context:Context){
-        if (username.isBlank() || email.isBlank() || password.isBlank() || confirmpassword.isBlank()){
+    fun signup(username:String,email:String,phonenumber:String,password:String,confirmpassword:String,navController: NavController,context:Context){
+        if (username.isBlank() || email.isBlank() || password.isBlank() || confirmpassword.isBlank()|| phonenumber.isBlank()){
             Toast.makeText(context,"Please fill all the fields",Toast.LENGTH_LONG).show()
             return
         }
@@ -27,7 +29,7 @@ class AuthViewModel:ViewModel() {
                 task ->
             if (task.isSuccessful){
                 val userId = auth.currentUser?.uid ?: ""
-                val user = UserModel(username = username, email = email, userId = userId)
+                val user = UserModel(username = username, email = email, userId = userId, phonenumber = phonenumber)
 
                 saveUserToDatabase(user,navController,context)
             }else{
@@ -70,4 +72,12 @@ class AuthViewModel:ViewModel() {
                 Toast.makeText(context,task.exception?.message ?: "Login failed",
                     Toast.LENGTH_LONG).show()
             }}}
+    private val _isLoggedIn = MutableStateFlow(auth.currentUser != null)
+    val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
+
+    fun logout() {
+        auth.signOut()                  // clears Firebase session
+        _isLoggedIn.value = false
+    }
 }
+

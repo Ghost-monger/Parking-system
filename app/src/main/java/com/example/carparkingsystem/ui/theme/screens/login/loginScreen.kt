@@ -13,14 +13,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.carparkingsystem.data.AuthViewModel
 import com.example.carparkingsystem.navigation.ROUTE_REGISTER
 import com.example.carparkingsystem.ui.theme.screens.register.ParkField
 
@@ -39,6 +42,8 @@ fun LoginScreen(navController: NavController) {
     var email           by remember { mutableStateOf("") }
     var password        by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    val authViewModel: AuthViewModel = viewModel()
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -133,7 +138,13 @@ fun LoginScreen(navController: NavController) {
 
                     // Login button
                     Button(
-                        onClick = { /* TODO: login logic */ },
+                        onClick = { authViewModel.login(
+                            email=email,
+                            password=password,
+                            navController=navController,
+                            context=context
+                        )
+                                  },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp),
