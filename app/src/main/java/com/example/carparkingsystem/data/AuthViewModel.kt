@@ -79,5 +79,6 @@ class AuthViewModel:ViewModel() {
         auth.signOut()                  // clears Firebase session
         _isLoggedIn.value = false
     }
+
 }
 

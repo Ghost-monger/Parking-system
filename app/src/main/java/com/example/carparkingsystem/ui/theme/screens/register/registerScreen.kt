@@ -32,13 +32,13 @@ import com.example.carparkingsystem.data.AuthViewModel
 import com.example.carparkingsystem.navigation.ROUTE_LOGIN
 
 // ── Reuse the same colour tokens from Dashboard ────────────
-private val NavyDark   = Color(0xFF0A0F1E)
+val NavyDark   = Color(0xFF0A0F1E)
 private val NavyMid    = Color(0xFF0D1630)
 private val NavyCard   = Color(0xFF131D3B)
 private val NavyBorder = Color(0xFF1E2D5A)
-private val Amber      = Color(0xFFF5C842)
+val Amber      = Color(0xFFF5C842)
 private val TextMuted  = Color(0xFF7A8AB5)
-private val TextDim    = Color(0xFF5A6A90)
+val TextDim    = Color(0xFF5A6A90)
 
 @Composable
 fun RegisterScreen(navController: NavController) {

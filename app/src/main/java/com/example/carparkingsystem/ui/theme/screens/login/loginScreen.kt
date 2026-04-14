@@ -35,7 +35,7 @@ private val NavyBorder = Color(0xFF1E2D5A)
 private val Amber      = Color(0xFFF5C842)
 private val BlueAccent = Color(0xFF7B9FFF)
 private val TextMuted  = Color(0xFF7A8AB5)
-private val TextDim    = Color(0xFF5A6A90)
+val TextDim    = Color(0xFF5A6A90)
 
 @Composable
 fun LoginScreen(navController: NavController) {

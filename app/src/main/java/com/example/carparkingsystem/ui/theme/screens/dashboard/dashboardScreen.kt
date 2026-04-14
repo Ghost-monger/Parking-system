@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import com.example.carparkingsystem.navigation.ROUTE_CAR
 import com.example.carparkingsystem.navigation.ROUTE_LOGIN
 import kotlinx.coroutines.flow.StateFlow
 
@@ -206,7 +207,7 @@ fun Dashboard(navController: NavController, authViewModel: AuthViewModel = viewM
                     label = "Add Car",
                     highlighted = true,
                     modifier = Modifier.weight(1f),
-                    onClick = { /* TODO */ }
+                    onClick = {navController.navigate(ROUTE_CAR)}
                 )
                 // View Cars (your original)
                 QuickActionCard(

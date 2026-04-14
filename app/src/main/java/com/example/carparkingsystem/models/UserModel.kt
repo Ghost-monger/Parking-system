@@ -6,3 +6,4 @@ data class UserModel(
     val userId: String="",
     val phonenumber: String = ""
 )
+
