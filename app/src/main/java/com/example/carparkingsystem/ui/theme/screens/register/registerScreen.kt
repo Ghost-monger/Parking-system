@@ -241,7 +241,9 @@ fun ParkField(
     placeholder: String,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    readOnly: Boolean = false,                    // ✅ add
+    modifier: Modifier = Modifier                 // ✅ add
 ) {
     Column {
         Text(
@@ -259,8 +261,9 @@ fun ParkField(
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             visualTransformation = visualTransformation,
+            readOnly = readOnly,                  // ✅ add
             singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),   // ✅ changed Modifier → modifier
             shape = RoundedCornerShape(12.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Amber,

@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
@@ -24,7 +26,10 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentDataType.Companion.Date
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -54,6 +60,9 @@ import com.example.carparkingsystem.ui.theme.screens.login.TextDim
 import com.example.carparkingsystem.ui.theme.screens.register.Amber
 import com.example.carparkingsystem.ui.theme.screens.register.NavyDark
 import com.example.carparkingsystem.ui.theme.screens.register.ParkField
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,6 +79,15 @@ fun AddCarScreen(navController: NavController) {
     var phone_number by remember { mutableStateOf("") }
     val CarViewModel: CarViewModel = viewModel()
     val context = LocalContext.current
+
+    var color by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+
+    val carColors = listOf("White", "Black", "Silver", "Red", "Blue", "Grey", "Brown", "Yellow")
+    val entry_time = remember {
+        SimpleDateFormat("dd MMM yyyy  hh:mm a", Locale.getDefault())
+            .format(Date())
+    }
 
     Scaffold(topBar = {TopAppBar(title = {Text("Add Car Details")},
         colors = TopAppBarDefaults.topAppBarColors(
@@ -136,6 +154,49 @@ fun AddCarScreen(navController: NavController) {
                 placeholder = "Enter your phone number",
                 leadingIcon = { Icon(Icons.Default.Phone, null, tint = com.example.carparkingsystem.ui.theme.screens.register.TextDim) }
             )
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded }
+            ) {
+                ParkField(
+                    label = "COLOR",
+                    value = color,
+                    onValueChange = {},
+                    placeholder = "Select car color",
+                    readOnly = true,
+                    modifier = Modifier.menuAnchor(),   // ✅ anchors dropdown to this field
+                    leadingIcon = {
+                        Icon(Icons.Default.ColorLens, null, tint = TextDim)
+                    },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    }
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    carColors.forEach { colorOption ->
+                        DropdownMenuItem(
+                            text = { Text(colorOption) },
+                            onClick = {
+                                color = colorOption
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+            }
+            ParkField(
+                label = "ENTRY TIME",
+                value = entry_time,
+                onValueChange = {},
+                placeholder = "Entry time",
+                readOnly = true,   // add this param to ParkField if not there
+                leadingIcon = { Icon(Icons.Default.AccessTime, null, tint = TextDim) }
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
@@ -145,6 +206,8 @@ fun AddCarScreen(navController: NavController) {
                         driver_name = driver_name,
                         phone_number = phone_number,
                         navController = navController,
+                        color = color,
+                        entry_time = entry_time,
                         context = context,
                         imageUri = imageUri
                     )

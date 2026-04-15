@@ -27,7 +27,7 @@ class CarViewModel:ViewModel() {
     val cloudinaryUrl = "https://api.cloudinary.com/v1_1/dmds9mat3/image/upload"
     val uploadPreset = "pic_folder"
 
-    fun uploadCar(imageUri: Uri?,plate_number:String,vehicle_type:String,driver_name:String,phone_number:String,
+    fun uploadCar(imageUri: Uri?,plate_number:String,vehicle_type:String,driver_name:String,phone_number:String,color:String,entry_time:String,
                       context: Context,navController: NavController){
 
         viewModelScope.launch (Dispatchers.IO){
@@ -40,7 +40,9 @@ class CarViewModel:ViewModel() {
                     "vehicle_type" to vehicle_type,
                     "driver_name" to driver_name,
                     "phone_number" to phone_number,
-                    "imageUrl" to imageUrl
+                    "imageUrl" to imageUrl,
+                    "color" to color,
+                    "entry_time" to entry_time
                 )
                 ref.setValue(carData).await()
                 withContext(Dispatchers.Main){
